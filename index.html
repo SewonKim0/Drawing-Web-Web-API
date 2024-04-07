@@ -13,23 +13,69 @@
         }
 
         body {
+            height: 100vh;
+        }
+
+        /* Prompt Input */
+        header {
+            height: 10%;
+            background-color: lightgray;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #generate {
+            margin-left: 4rem;
+            padding: 0.5rem;
+            font-size: 1.2rem;
+            border-radius: 0.5rem;
+            border: 1px solid black;
+        }
+        #generate:hover {
+            background-color: lightgray;
+        }
+        #generate:active {
+            background-color: white;
+        }
+
+        #input {
+            padding: 0.5rem;
+            font-size: 1.2rem;
+            border-radius: 0.5rem;
+            border: 1px solid black;
+        }
+
+        /* Canvas */
+        main {
+            background-color: #f1f1f1;
+            height: 90%;
+
             display: flex;
             justify-content: space-evenly;
             align-items: center;
-            height: 100vh;
-            background-color: #f1f1f1;
         }
 
         canvas {
-            width: 600px;
+            width: min(600px, 50%);
             height: 400px;
             border: 1px solid #000;
         }
     </style>
 </head>
 <body>
-    <canvas id="left"></canvas>
-    <canvas id="right"></canvas>
+    <!-- Prompt Input -->
+    <header>
+        <input id="input" type="text" />
+        <button id="generate"> Generate </button>
+    </header>
+
+    <!-- Canvas -->
+    <main>
+        <canvas id="left"></canvas>
+        <canvas id="right"></canvas>
+    </main>
     
     <script src="./index.js"></script>
 </body>
