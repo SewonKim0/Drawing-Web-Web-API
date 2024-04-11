@@ -9,7 +9,11 @@ let lwidth;
 let lheight;
 
 // set the number of canvas, scaled for screen resolution
-let pxScale = window.devicePixelRatio;
+// let pxScale = window.devicePixelRatio;
+let pxScale = 2;
+
+const pixelColors = [];
+let generatedImg;
 
 // get api key
 let key = null;
@@ -52,7 +56,8 @@ document.getElementById("generate").addEventListener("click", () => {
 
     //         const img = new Image();
     //         img.onload = function() {
-    //             getColors(img);
+    //             generatedImg = img;
+    //             getColors();
     //         };
     //         img.src = 'data:image/png;base64,' + bin;
     //     })
@@ -60,7 +65,8 @@ document.getElementById("generate").addEventListener("click", () => {
     // TEST
     const img = new Image();
     img.onload = function() {
-        getColors(img);
+        generatedImg = img;
+        getColors();
     };
     img.src = "./dummy.png";
 });
@@ -101,11 +107,11 @@ function setup() {
     }
 }
 
-// array of pixel colors
-const pixelColors = [];
-
-function getColors(image) {
-    context.drawImage(image, 0, 0, 45, 30);
+/**
+ * This function samples colors from generated image and displays them in the right canvas
+ */
+function getColors() {
+    context.drawImage(generatedImg, 0, 0, 45, 30);
 
     // sampling image data
     let imageData = context.getImageData(0, 0, right.width / 40, right.height / 40);
@@ -118,27 +124,12 @@ function getColors(image) {
         pixelColors.push(color);
     }
 
-    // create a grid of squares inside right canvas
-    const scale = 40;
-
-    for (let i = 0; i < right.width; i++) {
-        for (let j = 0; j < right.height; j++) {
-            // get random color
-            let color = pixelColors[Math.floor(Math.random() * pixelColors.length)];
-
-            // recolor grid of circles
-            context.save();
-            context.beginPath();
-            context.rect(
-                i * scale / pxScale, j * scale / pxScale, 
-                (scale - 1) / pxScale, (scale - 1) / pxScale);
-            context.fillStyle = color;
-            context.fill();
-            context.restore();
-        }
-    }
+    draw();
 }
 
+/**
+ * This function displays visual data on the right canvas via the pixelColors global array
+ */
 function draw() {
     // create a grid of squares inside right canvas
     const scale = 40;
@@ -158,6 +149,14 @@ function draw() {
             context.fill();
             context.restore();
         }
+    }
+
+    // redraw img on right canvas
+    if (generatedImg) {
+        console.log(generatedImg); // TEST
+        context.drawImage(generatedImg, 
+            width / 4, height / 4, 
+            width / 2, height / 2);
     }
 }
 
