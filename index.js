@@ -9,8 +9,7 @@ let lwidth;
 let lheight;
 
 // set the number of canvas, scaled for screen resolution
-// let pxScale = window.devicePixelRatio;
-let pxScale = 2;
+let pxScale = window.devicePixelRatio;
 
 const pixelColors = [];
 let generatedImg;
