@@ -28,11 +28,12 @@ document.getElementById("generate").addEventListener("click", () => {
 
     // get img prompt
     const prompt = document.getElementById("input").value;
+    // if (prompt === "") {
+    //     console.log("Cannot have empty prompt")
+    //     return;
+    // }
 
-    // TEST (use dummy img instead of generated img)
-    applyTransformations("./dummy.png");
-
-    // // get dalle img
+    // //get dalle img
     // fetch("https://api.openai.com/v1/images/generations", {
     //     method: "POST",
     //     headers: {
@@ -41,29 +42,28 @@ document.getElementById("generate").addEventListener("click", () => {
     //     },
     //     body: JSON.stringify({
     //         prompt: prompt,
-    //         n: 1
+    //         n: 1,
+    //         "response_format": "b64_json"
     //     })
     // })
     //     .then(res => res.json())
     //     .then(json => {
-    //         const url = json.data[0].url
-    //         applyTransformations(url);
+    //         const bin = json.data[0].b64_json
+
+    //         const img = new Image();
+    //         img.onload = function() {
+    //             getColors(img);
+    //         };
+    //         img.src = 'data:image/png;base64,' + bin;
     //     })
-});
 
-/**
- * This function applys graphical transformations to the right canvas based on given url image
- * @param {String} url String url to img
- */
-function applyTransformations(url) {
+    // TEST
     const img = new Image();
-
-    img.onload = function () {
-        // context.drawImage(img, 0, 0, right.width, right.height);
-        getColors(img)
+    img.onload = function() {
+        getColors(img);
     };
-    img.src = url;
-}
+    img.src = "./dummy.png";
+});
 
 function setup() {
     // set up dimensions for left canvas drawing
@@ -92,7 +92,9 @@ function setup() {
             // draw grid of circles
             lcontext.save();
             lcontext.beginPath();
-            lcontext.rect(i * scale / pxScale, j * scale / pxScale, 19, 19);
+            lcontext.rect(
+                i * scale / pxScale, j * scale / pxScale, 
+                (scale - 1) / pxScale, (scale - 1) / pxScale);
             lcontext.fill();
             lcontext.restore();
         }
@@ -127,7 +129,9 @@ function getColors(image) {
             // recolor grid of circles
             context.save();
             context.beginPath();
-            context.rect(i * scale / pxScale, j * scale / pxScale, 20, 20);
+            context.rect(
+                i * scale / pxScale, j * scale / pxScale, 
+                (scale - 1) / pxScale, (scale - 1) / pxScale);
             context.fillStyle = color;
             context.fill();
             context.restore();
@@ -141,9 +145,16 @@ function draw() {
 
     for (let i = 0; i < right.width; i++) {
         for (let j = 0; j < right.height; j++) {
+            if (pixelColors.length !== 0) {
+                let color = pixelColors[Math.floor(Math.random() * pixelColors.length)];
+                context.fillStyle = color;
+            }
+
             context.save();
             context.beginPath();
-            context.rect(i * scale / pxScale, j * scale / pxScale, 19, 19);
+            context.rect(
+                i * scale / pxScale, j * scale / pxScale, 
+                (scale - 1) / pxScale, (scale - 1) / pxScale);
             context.fill();
             context.restore();
         }
